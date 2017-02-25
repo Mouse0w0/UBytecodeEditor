@@ -1,6 +1,7 @@
 package me.mouse.ube;
 
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application{
@@ -11,8 +12,12 @@ public class Main extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// TODO 自动生成的方法存根
+		primaryStage.setTitle("UBytecodeEditor");
 		
+		Scene scene = new Scene(new MainUI());
+		primaryStage.setScene(scene);
+		
+		primaryStage.show();
 	}
 
 }
