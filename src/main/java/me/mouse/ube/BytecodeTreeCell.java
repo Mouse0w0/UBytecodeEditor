@@ -20,7 +20,7 @@ public final class BytecodeTreeCell extends TreeCell<Object> {
 			setText(null);
 			setGraphic(null);
 		} else {
-			setText(BytecodeUtils.BYTECODE_HANDLERS.get(item.getClass()).getText(item,root));
+			setText(BytecodeUtils.getBytecodeHandler(item.getClass())._getText(item,root));
 			setGraphic(getTreeItem().getGraphic());
 		}
 	}

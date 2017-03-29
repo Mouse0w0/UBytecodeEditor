@@ -4,19 +4,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.signature.SignatureReader;
 import org.objectweb.asm.tree.*;
+import org.objectweb.asm.util.TraceSignatureVisitor;
 
 public final class BytecodeUtils {
 
 	private BytecodeUtils() {}
 
-	public static final Map<Class<?>, BytecodeHandler> BYTECODE_HANDLERS = new HashMap<>();
+	private static final Map<Class<?>, BytecodeHandler<?>> BYTECODE_HANDLERS = new HashMap<>();
 
 	static {
 		BYTECODE_HANDLERS.put(ClassNode.class, new BytecodeHandler.ClassHandler());
 		BYTECODE_HANDLERS.put(FieldNode.class, new BytecodeHandler.FieldHandler());
 		BYTECODE_HANDLERS.put(MethodNode.class, new BytecodeHandler.MethodHandler());
 		BYTECODE_HANDLERS.put(AnnotationNode.class, new BytecodeHandler.AnnotationHandler());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> BytecodeHandler<T> getBytecodeHandler(Class<T> clazz){
+		return (BytecodeHandler<T>) BYTECODE_HANDLERS.get(clazz);
 	}
 
 	public static String getAccess(final int access) {
@@ -61,5 +68,12 @@ public final class BytecodeUtils {
 			sb.append("enum ");
 		}
 		return sb.toString();
+	}
+	
+	public static TraceSignatureVisitor getTraceSignatureVisitor(String desc){
+		TraceSignatureVisitor v = new TraceSignatureVisitor(0);
+		SignatureReader r = new SignatureReader(desc);
+		r.accept(v);
+		return v;
 	}
 }

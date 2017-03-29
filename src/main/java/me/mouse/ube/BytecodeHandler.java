@@ -5,22 +5,24 @@ import java.util.List;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.signature.SignatureReader;
 import org.objectweb.asm.tree.*;
-import org.objectweb.asm.util.Textifier;
 import org.objectweb.asm.util.TraceSignatureVisitor;
 
 import static me.mouse.ube.BytecodeUtils.*;
 
-public interface BytecodeHandler {
+public interface BytecodeHandler<T> {
 	
-	String getText(Object item, ClassNode root);
+	@SuppressWarnings("unchecked")
+	default String _getText(Object item, ClassNode root){
+		return getText((T)item, root);
+	}
+	
+	String getText(T item, ClassNode root);
 
-	public static final class ClassHandler implements BytecodeHandler {
+	public static final class ClassHandler implements BytecodeHandler<ClassNode> {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public String getText(Object item, ClassNode root) {
-			ClassNode n = (ClassNode) item;
-			
+		public String getText(ClassNode n, ClassNode root) {
 			StringBuilder sb = new StringBuilder();
 
 			sb.append(getAccess(n.access & ~Opcodes.ACC_SUPER));
@@ -46,12 +48,10 @@ public interface BytecodeHandler {
 		}
 	}
 
-	public static final class FieldHandler implements BytecodeHandler {
+	public static final class FieldHandler implements BytecodeHandler<FieldNode> {
 
 		@Override
-		public String getText(Object item, ClassNode root) {
-			FieldNode n = (FieldNode) item;
-			
+		public String getText(FieldNode n, ClassNode root) {
 			StringBuilder sb = new StringBuilder();
 
 			sb.append(getAccess(n.access));
@@ -74,12 +74,10 @@ public interface BytecodeHandler {
 		}
 	}
 
-	public static final class MethodHandler implements BytecodeHandler {
+	public static final class MethodHandler implements BytecodeHandler<MethodNode> {
 
 		@Override
-		public String getText(Object item, ClassNode root) {
-			MethodNode n = (MethodNode) item;
-			
+		public String getText(MethodNode n, ClassNode root) {
 			StringBuilder sb = new StringBuilder();
 
 			sb.append(getAccess(n.access & ~Opcodes.ACC_VOLATILE));
@@ -112,11 +110,11 @@ public interface BytecodeHandler {
 		}
 	}
 	
-	public static final class AnnotationHandler implements BytecodeHandler{
+	public static final class AnnotationHandler implements BytecodeHandler<AnnotationNode>{
 
+		@SuppressWarnings("unchecked")
 		@Override
-		public String getText(Object item, ClassNode root) {
-			AnnotationNode n = (AnnotationNode) item;
+		public String getText(AnnotationNode n, ClassNode root) {
 			StringBuilder sb = new StringBuilder();
 			
 	        sb.append('@');
