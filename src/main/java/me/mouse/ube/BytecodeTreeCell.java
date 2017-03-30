@@ -16,7 +16,7 @@ public final class BytecodeTreeCell extends TreeCell<Object> {
 	public void updateItem(Object item, boolean empty) {
 		super.updateItem(item, empty);
 
-		if (empty) {
+		if (empty&&BytecodeUtils.getBytecodeHandler(item.getClass())!=null) {
 			setText(null);
 			setGraphic(null);
 		} else {

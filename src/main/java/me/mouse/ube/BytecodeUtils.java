@@ -3,10 +3,18 @@ package me.mouse.ube;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.signature.SignatureReader;
 import org.objectweb.asm.tree.*;
 import org.objectweb.asm.util.TraceSignatureVisitor;
+
+import me.mouse.ube.handler.*;
+import me.mouse.ube.warpper.FieldInsnNodeWarpper;
+import me.mouse.ube.warpper.LabelNodeWarpper;
+import me.mouse.ube.warpper.LdcInsnNodeWarpper;
+import me.mouse.ube.warpper.MethodNodeWarpper;
 
 public final class BytecodeUtils {
 
@@ -15,10 +23,14 @@ public final class BytecodeUtils {
 	private static final Map<Class<?>, BytecodeHandler<?>> BYTECODE_HANDLERS = new HashMap<>();
 
 	static {
-		BYTECODE_HANDLERS.put(ClassNode.class, new BytecodeHandler.ClassHandler());
-		BYTECODE_HANDLERS.put(FieldNode.class, new BytecodeHandler.FieldHandler());
-		BYTECODE_HANDLERS.put(MethodNode.class, new BytecodeHandler.MethodHandler());
-		BYTECODE_HANDLERS.put(AnnotationNode.class, new BytecodeHandler.AnnotationHandler());
+		BYTECODE_HANDLERS.put(ClassNode.class, new ClassHandler());
+		BYTECODE_HANDLERS.put(FieldNode.class, new FieldHandler());
+		BYTECODE_HANDLERS.put(MethodNodeWarpper.class, new MethodHandler());
+		BYTECODE_HANDLERS.put(AnnotationNode.class, new AnnotationHandler());
+		BYTECODE_HANDLERS.put(TypeAnnotationNode.class, new TypeAnnotationHandler());
+		BYTECODE_HANDLERS.put(LabelNodeWarpper.class, new LabelHandler());
+		BYTECODE_HANDLERS.put(LdcInsnNodeWarpper.class, new LdcInsnHandler());
+		BYTECODE_HANDLERS.put(FieldInsnNodeWarpper.class, new FieldInsnHandler());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -69,6 +81,105 @@ public final class BytecodeUtils {
 		}
 		return sb.toString();
 	}
+	
+    public static String getTypeReference(final int typeRef) {
+        TypeReference ref = new TypeReference(typeRef);
+        switch (ref.getSort()) {
+        case TypeReference.CLASS_TYPE_PARAMETER:
+            return "CLASS_TYPE_PARAMETER "+ ref.getTypeParameterIndex();
+        case TypeReference.METHOD_TYPE_PARAMETER:
+        	return "METHOD_TYPE_PARAMETER "+ref.getTypeParameterIndex();
+        case TypeReference.CLASS_EXTENDS:
+        	return "CLASS_EXTENDS "+ref.getSuperTypeIndex();
+        case TypeReference.CLASS_TYPE_PARAMETER_BOUND:
+        	return new StringBuilder("CLASS_TYPE_PARAMETER_BOUND ")
+        			.append(ref.getTypeParameterIndex()).append(", ")
+        			.append(ref.getTypeParameterBoundIndex()).toString();
+        case TypeReference.METHOD_TYPE_PARAMETER_BOUND:
+        	return new StringBuilder("METHOD_TYPE_PARAMETER_BOUND ")
+                    .append(ref.getTypeParameterIndex()).append(", ")
+                    .append(ref.getTypeParameterBoundIndex()).toString();
+        case TypeReference.FIELD:
+            return "FIELD";
+        case TypeReference.METHOD_RETURN:
+            return "METHOD_RETURN";
+        case TypeReference.METHOD_RECEIVER:
+            return "METHOD_RECEIVER";
+        case TypeReference.METHOD_FORMAL_PARAMETER:
+            return "METHOD_FORMAL_PARAMETER "+ref.getFormalParameterIndex();
+        case TypeReference.THROWS:
+            return "THROWS "+ref.getExceptionIndex();
+        case TypeReference.LOCAL_VARIABLE:
+            return "LOCAL_VARIABLE";
+        case TypeReference.RESOURCE_VARIABLE:
+            return "RESOURCE_VARIABLE";
+        case TypeReference.EXCEPTION_PARAMETER:
+            return "EXCEPTION_PARAMETER "+ref.getTryCatchBlockIndex();
+        case TypeReference.INSTANCEOF:
+            return "INSTANCEOF";
+        case TypeReference.NEW:
+            return "NEW";
+        case TypeReference.CONSTRUCTOR_REFERENCE:
+            return "CONSTRUCTOR_REFERENCE";
+        case TypeReference.METHOD_REFERENCE:
+            return "METHOD_REFERENCE";
+        case TypeReference.CAST:
+            return "CAST "+ref.getTypeArgumentIndex();
+        case TypeReference.CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT:
+            return "CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT "+ref.getTypeArgumentIndex();
+        case TypeReference.METHOD_INVOCATION_TYPE_ARGUMENT:
+            return "METHOD_INVOCATION_TYPE_ARGUMENT "+ref.getTypeArgumentIndex();
+        case TypeReference.CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT:
+            return "CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT "+ref.getTypeArgumentIndex();
+        case TypeReference.METHOD_REFERENCE_TYPE_ARGUMENT:
+            return "METHOD_REFERENCE_TYPE_ARGUMENT "+ref.getTypeArgumentIndex();
+        default :
+        	return "";
+        }
+    }
+    
+    public static String getFrameTypes(final int n, final Object[] o) {
+    	StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; ++i) {
+            if (i > 0) {
+                sb.append(' ');
+            }
+            if (o[i] instanceof String) {
+                String desc = (String) o[i];
+                if (desc.startsWith("[")) {
+                	sb.append(getTraceSignatureVisitor(desc).getDeclaration());
+                } else {
+                	sb.append(getTraceSignatureVisitor(desc).getDeclaration());
+                }
+            } else if (o[i] instanceof Integer) {
+                switch (((Integer) o[i]).intValue()) {
+                case 0:
+                    sb.append("T");
+                    break;
+                case 1:
+                	sb.append("I");
+                    break;
+                case 2:
+                	sb.append("F");
+                    break;
+                case 3:
+                	sb.append("D");
+                    break;
+                case 4:
+                	sb.append("J");
+                    break;
+                case 5:
+                	sb.append("N");
+                    break;
+                case 6:
+                	sb.append("U");
+                    break;
+                }
+            } else {
+                appendLabel((Label) o[i]);
+            }
+        }
+    }
 	
 	public static TraceSignatureVisitor getTraceSignatureVisitor(String desc){
 		TraceSignatureVisitor v = new TraceSignatureVisitor(0);

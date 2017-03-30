@@ -109,12 +109,18 @@ public final class ClassEditor extends AnchorPane {
 		
 		TreeItem<Object> clazz = new TreeItem<Object>(classNode);
 		treeView.setRoot(clazz);
+		if(classNode.visibleAnnotations!=null)
+			classNode.visibleAnnotations.stream().forEach(i->clazz.getChildren().add(new TreeItem<Object>(i)));
+		if(classNode.visibleTypeAnnotations!=null)
+			classNode.visibleTypeAnnotations.stream().forEach(i->clazz.getChildren().add(new TreeItem<Object>(i)));
 		
 		((List<FieldNode>)classNode.fields).stream().forEach(n -> {
 			TreeItem<Object> item = new TreeItem<Object>(n);
 			clazz.getChildren().add(item);
 			if(n.visibleAnnotations!=null)
 				n.visibleAnnotations.stream().forEach(i->item.getChildren().add(new TreeItem<Object>(i)));
+			if(n.visibleTypeAnnotations!=null)
+				n.visibleTypeAnnotations.stream().forEach(i->item.getChildren().add(new TreeItem<Object>(i)));
 		});
 		
 		((List<MethodNode>)classNode.methods).stream().forEach(n -> {
@@ -122,6 +128,11 @@ public final class ClassEditor extends AnchorPane {
 			clazz.getChildren().add(item);
 			if(n.visibleAnnotations!=null)
 				n.visibleAnnotations.stream().forEach(i->item.getChildren().add(new TreeItem<Object>(i)));
+			if(n.visibleTypeAnnotations!=null)
+				n.visibleTypeAnnotations.stream().forEach(i->item.getChildren().add(new TreeItem<Object>(i)));
+			if(n.instructions!=null)
+				for(int i=0;i<n.instructions.size();i++)
+					n.instructions.get(i);
 		});
 	}
 }
