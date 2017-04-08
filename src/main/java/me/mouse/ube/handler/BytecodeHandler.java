@@ -2,6 +2,8 @@ package me.mouse.ube.handler;
 
 import org.objectweb.asm.tree.ClassNode;
 
+import javafx.scene.control.TreeItem;
+
 public interface BytecodeHandler<T> {
 	
 	@SuppressWarnings("unchecked")
@@ -10,4 +12,6 @@ public interface BytecodeHandler<T> {
 	}
 	
 	String getText(T item, ClassNode root);
+	
+	TreeItem<T> getNode(T node);
 }

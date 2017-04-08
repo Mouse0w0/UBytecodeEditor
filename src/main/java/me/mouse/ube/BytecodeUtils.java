@@ -11,19 +11,22 @@ import org.objectweb.asm.tree.*;
 import org.objectweb.asm.util.TraceSignatureVisitor;
 
 import me.mouse.ube.handler.*;
+import me.mouse.ube.warpper.ClassNodeWarpper;
 import me.mouse.ube.warpper.FieldInsnNodeWarpper;
 import me.mouse.ube.warpper.LabelNodeWarpper;
 import me.mouse.ube.warpper.LdcInsnNodeWarpper;
 import me.mouse.ube.warpper.MethodNodeWarpper;
+import me.mouse.ube.warpper.NodeWarpper;
 
 public final class BytecodeUtils {
 
 	private BytecodeUtils() {}
 
 	private static final Map<Class<?>, BytecodeHandler<?>> BYTECODE_HANDLERS = new HashMap<>();
+	private static final Map<Class<?>, Class<?>> WARPPER_TO_NODE = new HashMap<>();
 
 	static {
-		BYTECODE_HANDLERS.put(ClassNode.class, new ClassHandler());
+		BYTECODE_HANDLERS.put(ClassNodeWarpper.class, new ClassHandler());
 		BYTECODE_HANDLERS.put(FieldNode.class, new FieldHandler());
 		BYTECODE_HANDLERS.put(MethodNodeWarpper.class, new MethodHandler());
 		BYTECODE_HANDLERS.put(AnnotationNode.class, new AnnotationHandler());
@@ -36,6 +39,10 @@ public final class BytecodeUtils {
 	@SuppressWarnings("unchecked")
 	public static <T> BytecodeHandler<T> getBytecodeHandler(Class<T> clazz){
 		return (BytecodeHandler<T>) BYTECODE_HANDLERS.get(clazz);
+	}
+	
+	public static <T extends NodeWarpper<?, ?>> T getNodeWarpper(Object node,Object parent){
+		
 	}
 
 	public static String getAccess(final int access) {
