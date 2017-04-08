@@ -1,13 +1,13 @@
 package me.mouse.ube.handler;
 
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.ClassNode;
+import javafx.scene.control.TreeItem;
 import me.mouse.ube.warpper.LdcInsnNodeWarpper;
 
 public class LdcInsnHandler implements BytecodeHandler<LdcInsnNodeWarpper>{
 
 	@Override
-	public String getText(LdcInsnNodeWarpper item, ClassNode root) {
+	public String getText(LdcInsnNodeWarpper item) {
 		StringBuilder sb = new StringBuilder("LDC ");
 		
         if (item.node.cst instanceof String) {
@@ -19,6 +19,11 @@ public class LdcInsnHandler implements BytecodeHandler<LdcInsnNodeWarpper>{
         }
         
 		return sb.toString();
+	}
+
+	@Override
+	public TreeItem<?> getNode(LdcInsnNodeWarpper node) {
+		return new TreeItem<>(node);
 	}
 
 }

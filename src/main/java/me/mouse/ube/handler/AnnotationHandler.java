@@ -2,14 +2,15 @@ package me.mouse.ube.handler;
 
 import org.objectweb.asm.signature.SignatureReader;
 import org.objectweb.asm.tree.AnnotationNode;
-import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.util.TraceSignatureVisitor;
+
+import javafx.scene.control.TreeItem;
 
 public class AnnotationHandler implements BytecodeHandler<AnnotationNode>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public String getText(AnnotationNode n, ClassNode root) {
+	public String getText(AnnotationNode n) {
 		StringBuilder sb = new StringBuilder();
 		
         sb.append('@');
@@ -23,5 +24,10 @@ public class AnnotationHandler implements BytecodeHandler<AnnotationNode>{
         sb.append(")");
 		
 		return sb.toString();
+	}
+
+	@Override
+	public TreeItem<?> getNode(AnnotationNode node) {
+		return new TreeItem<>(node);
 	}
 }

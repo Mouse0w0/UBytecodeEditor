@@ -3,12 +3,13 @@ package me.mouse.ube.handler;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 
+import javafx.scene.control.TreeItem;
 import me.mouse.ube.warpper.FrameNodeWarpper;
 
 public class FrameHandler implements BytecodeHandler<FrameNodeWarpper>{
 
 	@Override
-	public String getText(FrameNodeWarpper item, ClassNode root) {
+	public String getText(FrameNodeWarpper item) {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("FRAME ");
@@ -39,6 +40,11 @@ public class FrameHandler implements BytecodeHandler<FrameNodeWarpper>{
         }
 		
 		return sb.toString();
+	}
+
+	@Override
+	public TreeItem<?> getNode(FrameNodeWarpper node) {
+		return null;
 	}
 
 }

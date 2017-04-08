@@ -1,12 +1,12 @@
 package me.mouse.ube.handler;
 
-import org.objectweb.asm.tree.ClassNode;
+import javafx.scene.control.TreeItem;
 import me.mouse.ube.warpper.LabelNodeWarpper;
 
 public class LabelHandler implements BytecodeHandler<LabelNodeWarpper>{
 
 	@Override
-	public String getText(LabelNodeWarpper item, ClassNode root) {
+	public String getText(LabelNodeWarpper item) {
         String name = item.parent.labelNames.get(item.node.getLabel());
         if (name == null) {
             name = "L" + item.parent.labelNames.size();
@@ -15,5 +15,8 @@ public class LabelHandler implements BytecodeHandler<LabelNodeWarpper>{
 		return name;
 	}
 
-
+	@Override
+	public TreeItem<?> getNode(LabelNodeWarpper node) {
+		return new TreeItem<>(node);
+	}
 }

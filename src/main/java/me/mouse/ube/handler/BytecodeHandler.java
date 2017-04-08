@@ -1,17 +1,20 @@
 package me.mouse.ube.handler;
 
-import org.objectweb.asm.tree.ClassNode;
-
 import javafx.scene.control.TreeItem;
 
 public interface BytecodeHandler<T> {
 	
 	@SuppressWarnings("unchecked")
-	default String _getText(Object item, ClassNode root){
-		return getText((T)item, root);
+	default String impl_getText(Object item){
+		return getText((T)item);
 	}
 	
-	String getText(T item, ClassNode root);
+	String getText(T item);
 	
-	TreeItem<T> getNode(T node);
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	default TreeItem impl_getNode(Object node){
+		return getNode((T) node);
+	}
+	
+	TreeItem<?> getNode(T node);
 }

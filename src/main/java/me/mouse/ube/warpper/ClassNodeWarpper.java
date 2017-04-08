@@ -4,8 +4,8 @@ import org.objectweb.asm.tree.ClassNode;
 
 public class ClassNodeWarpper extends NodeWarpper<ClassNode, ClassNode>{
 
-	public ClassNodeWarpper(ClassNode node, ClassNode parent) {
-		super(node, parent);
+	public ClassNodeWarpper(ClassNode node) {
+		super(node, node);
 	}
 
 }

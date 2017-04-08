@@ -16,9 +16,9 @@ import org.objectweb.asm.util.TraceClassVisitor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
+import me.mouse.ube.warpper.ClassNodeWarpper;
 
 public final class ClassEditor extends AnchorPane {
 
@@ -105,34 +105,7 @@ public final class ClassEditor extends AnchorPane {
 
 	@SuppressWarnings("unchecked")
 	private void updateTree() {
-		treeView.setCellFactory(param -> new BytecodeTreeCell(classNode));
-		
-		TreeItem<Object> clazz = new TreeItem<Object>(classNode);
-		treeView.setRoot(clazz);
-		if(classNode.visibleAnnotations!=null)
-			classNode.visibleAnnotations.stream().forEach(i->clazz.getChildren().add(new TreeItem<Object>(i)));
-		if(classNode.visibleTypeAnnotations!=null)
-			classNode.visibleTypeAnnotations.stream().forEach(i->clazz.getChildren().add(new TreeItem<Object>(i)));
-		
-		((List<FieldNode>)classNode.fields).stream().forEach(n -> {
-			TreeItem<Object> item = new TreeItem<Object>(n);
-			clazz.getChildren().add(item);
-			if(n.visibleAnnotations!=null)
-				n.visibleAnnotations.stream().forEach(i->item.getChildren().add(new TreeItem<Object>(i)));
-			if(n.visibleTypeAnnotations!=null)
-				n.visibleTypeAnnotations.stream().forEach(i->item.getChildren().add(new TreeItem<Object>(i)));
-		});
-		
-		((List<MethodNode>)classNode.methods).stream().forEach(n -> {
-			TreeItem<Object> item = new TreeItem<Object>(n);
-			clazz.getChildren().add(item);
-			if(n.visibleAnnotations!=null)
-				n.visibleAnnotations.stream().forEach(i->item.getChildren().add(new TreeItem<Object>(i)));
-			if(n.visibleTypeAnnotations!=null)
-				n.visibleTypeAnnotations.stream().forEach(i->item.getChildren().add(new TreeItem<Object>(i)));
-			if(n.instructions!=null)
-				for(int i=0;i<n.instructions.size();i++)
-					n.instructions.get(i);
-		});
+		treeView.setCellFactory(param -> new BytecodeTreeCell());
+		treeView.setRoot(BytecodeUtils.getBytecodeHandler(ClassNodeWarpper.class).impl_getNode(new ClassNodeWarpper(classNode)));
 	}
 }
