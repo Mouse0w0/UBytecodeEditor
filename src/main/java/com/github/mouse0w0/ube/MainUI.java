@@ -1,4 +1,4 @@
-package me.mouse.ube;
+package com.github.mouse0w0.ube;
 
 import java.io.File;
 

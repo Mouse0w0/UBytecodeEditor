@@ -1,4 +1,4 @@
-package me.mouse.ube;
+package com.github.mouse0w0.ube;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,12 +13,14 @@ import org.objectweb.asm.tree.*;
 import org.objectweb.asm.util.ASMifier;
 import org.objectweb.asm.util.Textifier;
 import org.objectweb.asm.util.TraceClassVisitor;
+
+import com.github.mouse0w0.ube.warpper.ClassNodeWarpper;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
-import me.mouse.ube.warpper.ClassNodeWarpper;
 
 public final class ClassEditor extends AnchorPane {
 
