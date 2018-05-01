@@ -1,5 +1,7 @@
 package com.github.mouse0w0.ube;
 
+import com.github.mouse0w0.ube.ui.MainUI;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

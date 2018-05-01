@@ -1,4 +1,6 @@
-package com.github.mouse0w0.ube;
+package com.github.mouse0w0.ube.ui;
+
+import com.github.mouse0w0.ube.wrapper.util.BytecodeUtils;
 
 import javafx.scene.control.TreeCell;
 

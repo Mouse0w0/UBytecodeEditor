@@ -1,6 +1,6 @@
 package com.github.mouse0w0.ube.handler;
 
-import static com.github.mouse0w0.ube.BytecodeUtils.getTypeReference;
+import static com.github.mouse0w0.ube.wrapper.util.BytecodeUtils.getTypeReference;
 
 import org.objectweb.asm.signature.SignatureReader;
 import org.objectweb.asm.tree.TypeAnnotationNode;

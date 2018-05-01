@@ -1,4 +1,4 @@
-package com.github.mouse0w0.ube;
+package com.github.mouse0w0.ube.ui;
 
 import java.io.File;
 
@@ -24,7 +24,8 @@ public final class MainUI extends BorderPane {
 		open.setOnAction(event -> {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Open .class");
-			fileChooser.getExtensionFilters().add(new ExtensionFilter("Class", "*.class"));
+			fileChooser.getExtensionFilters().add(new ExtensionFilter("Class(.class)", "*.class"));
+			fileChooser.getExtensionFilters().add(new ExtensionFilter("Jar(.jar)", "*.jar"));
 
 			File file = fileChooser.showOpenDialog(getScene().getWindow());
 			if (file == null)

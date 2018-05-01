@@ -1,6 +1,6 @@
 package com.github.mouse0w0.ube.handler;
 
-import static com.github.mouse0w0.ube.BytecodeUtils.getAccess;
+import static com.github.mouse0w0.ube.wrapper.util.BytecodeUtils.getAccess;
 
 import java.util.List;
 
@@ -8,10 +8,10 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import com.github.mouse0w0.ube.BytecodeUtils;
 import com.github.mouse0w0.ube.warpper.ClassNodeWarpper;
 import com.github.mouse0w0.ube.warpper.FieldNodeWarpper;
 import com.github.mouse0w0.ube.warpper.MethodNodeWarpper;
+import com.github.mouse0w0.ube.wrapper.util.BytecodeUtils;
 
 import javafx.scene.control.TreeItem;
 

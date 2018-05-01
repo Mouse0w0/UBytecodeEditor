@@ -1,9 +1,8 @@
-package com.github.mouse0w0.ube;
+package com.github.mouse0w0.ube.wrapper.util;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.signature.SignatureReader;
@@ -12,12 +11,8 @@ import org.objectweb.asm.util.TraceSignatureVisitor;
 
 import com.github.mouse0w0.ube.handler.*;
 import com.github.mouse0w0.ube.warpper.ClassNodeWarpper;
-import com.github.mouse0w0.ube.warpper.FieldInsnNodeWarpper;
 import com.github.mouse0w0.ube.warpper.FieldNodeWarpper;
-import com.github.mouse0w0.ube.warpper.LabelNodeWarpper;
-import com.github.mouse0w0.ube.warpper.LdcInsnNodeWarpper;
 import com.github.mouse0w0.ube.warpper.MethodNodeWarpper;
-import com.github.mouse0w0.ube.warpper.NodeWarpper;
 
 public final class BytecodeUtils {
 
@@ -31,9 +26,6 @@ public final class BytecodeUtils {
 		BYTECODE_HANDLERS.put(MethodNodeWarpper.class, new MethodHandler());
 		BYTECODE_HANDLERS.put(AnnotationNode.class, new AnnotationHandler());
 		BYTECODE_HANDLERS.put(TypeAnnotationNode.class, new TypeAnnotationHandler());
-		BYTECODE_HANDLERS.put(LabelNodeWarpper.class, new LabelHandler());
-		BYTECODE_HANDLERS.put(LdcInsnNodeWarpper.class, new LdcInsnHandler());
-		BYTECODE_HANDLERS.put(FieldInsnNodeWarpper.class, new FieldInsnHandler());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -138,49 +130,6 @@ public final class BytecodeUtils {
             return "METHOD_REFERENCE_TYPE_ARGUMENT "+ref.getTypeArgumentIndex();
         default :
         	return "";
-        }
-    }
-    
-    public static String getFrameTypes(final int n, final Object[] o) {
-    	StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < n; ++i) {
-            if (i > 0) {
-                sb.append(' ');
-            }
-            if (o[i] instanceof String) {
-                String desc = (String) o[i];
-                if (desc.startsWith("[")) {
-                	sb.append(getTraceSignatureVisitor(desc).getDeclaration());
-                } else {
-                	sb.append(getTraceSignatureVisitor(desc).getDeclaration());
-                }
-            } else if (o[i] instanceof Integer) {
-                switch (((Integer) o[i]).intValue()) {
-                case 0:
-                    sb.append("T");
-                    break;
-                case 1:
-                	sb.append("I");
-                    break;
-                case 2:
-                	sb.append("F");
-                    break;
-                case 3:
-                	sb.append("D");
-                    break;
-                case 4:
-                	sb.append("J");
-                    break;
-                case 5:
-                	sb.append("N");
-                    break;
-                case 6:
-                	sb.append("U");
-                    break;
-                }
-            } else {
-                appendLabel((Label) o[i]);
-            }
         }
     }
 	

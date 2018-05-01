@@ -1,12 +1,12 @@
 package com.github.mouse0w0.ube.handler;
 
-import static com.github.mouse0w0.ube.BytecodeUtils.getAccess;
+import static com.github.mouse0w0.ube.wrapper.util.BytecodeUtils.getAccess;
 
 import org.objectweb.asm.signature.SignatureReader;
 import org.objectweb.asm.util.TraceSignatureVisitor;
 
-import com.github.mouse0w0.ube.BytecodeUtils;
 import com.github.mouse0w0.ube.warpper.FieldNodeWarpper;
+import com.github.mouse0w0.ube.wrapper.util.BytecodeUtils;
 
 import javafx.scene.control.TreeItem;
 
