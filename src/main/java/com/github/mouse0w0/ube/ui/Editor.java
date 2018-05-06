@@ -71,10 +71,7 @@ public final class Editor extends AnchorPane implements Controller{
 	}
 
 	public void showBytecode() {
-		NodeWrapper<?> node = treeView.getSelectionModel().getSelectedItem().getValue();
-		while(node != null && !(node instanceof ClassWrapper)) {
-			node = node.getParent();
-		}
+		ClassWrapper node = getSelectedClass();
 		if(node != null) 
 			showBytecode(((ClassWrapper)node).getClassNode());
 	}
@@ -86,12 +83,9 @@ public final class Editor extends AnchorPane implements Controller{
 	}
 
 	public void showAsmSource() {
-		NodeWrapper<?> node = treeView.getSelectionModel().getSelectedItem().getValue();
-		while(node != null && !(node instanceof ClassWrapper)) {
-			node = node.getParent();
-		}
+		ClassWrapper node = getSelectedClass();
 		if(node != null) 
-			showAsmSource(((ClassWrapper)node).getClassNode());
+			showAsmSource(node.getClassNode());
 	}
 	
 	private void showAsmSource(ClassNode node) {
@@ -109,6 +103,14 @@ public final class Editor extends AnchorPane implements Controller{
 				sb.append(formatASMText((List<?>) obj));
 		}
 		return sb.toString();
+	}
+	
+	private ClassWrapper getSelectedClass() {
+		NodeWrapper<?> node = treeView.getSelectionModel().getSelectedItem().getValue();
+		while(node != null && !(node instanceof ClassWrapper)) {
+			node = node.getParent();
+		}
+		return (ClassWrapper) node;
 	}
 
 	public Path getPath() {
