@@ -1,36 +1,32 @@
-package com.github.mouse0w0.ube.wrapper.util;
+package com.github.mouse0w0.ube.util;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.signature.SignatureReader;
-import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.util.TraceSignatureVisitor;
-
-import com.github.mouse0w0.ube.handler.*;
-import com.github.mouse0w0.ube.warpper.ClassNodeWarpper;
-import com.github.mouse0w0.ube.warpper.FieldNodeWarpper;
-import com.github.mouse0w0.ube.warpper.MethodNodeWarpper;
 
 public final class BytecodeUtils {
 
-	private BytecodeUtils() {}
-
-	private static final Map<Class<?>, BytecodeHandler<?>> BYTECODE_HANDLERS = new HashMap<>();
-
-	static {
-		BYTECODE_HANDLERS.put(ClassNodeWarpper.class, new ClassHandler());
-		BYTECODE_HANDLERS.put(FieldNodeWarpper.class, new FieldHandler());
-		BYTECODE_HANDLERS.put(MethodNodeWarpper.class, new MethodHandler());
-		BYTECODE_HANDLERS.put(AnnotationNode.class, new AnnotationHandler());
-		BYTECODE_HANDLERS.put(TypeAnnotationNode.class, new TypeAnnotationHandler());
+	private BytecodeUtils() {} 
+	
+	public static ClassNode loadClassNode(Path path) throws IOException {
+		try(InputStream is = Files.newInputStream(path)){
+			ClassReader cr = new ClassReader(is);
+			ClassNode classNode = new ClassNode();
+			cr.accept(classNode, 0);
+			return classNode;
+		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static <T> BytecodeHandler<T> getBytecodeHandler(Class<T> clazz){
-		return (BytecodeHandler<T>) BYTECODE_HANDLERS.get(clazz);
+	public static String getRealName(String internalName) {
+		return internalName.replace('/', '.');
 	}
 
 	public static String getAccess(final int access) {

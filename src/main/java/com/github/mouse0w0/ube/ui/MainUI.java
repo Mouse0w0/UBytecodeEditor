@@ -23,44 +23,43 @@ public final class MainUI extends BorderPane {
 		Button open = new Button("Open");
 		open.setOnAction(event -> {
 			FileChooser fileChooser = new FileChooser();
-			fileChooser.setTitle("Open .class");
-			fileChooser.getExtensionFilters().add(new ExtensionFilter("Class(.class)", "*.class"));
-			fileChooser.getExtensionFilters().add(new ExtensionFilter("Jar(.jar)", "*.jar"));
+			fileChooser.setTitle("Open file");
+			fileChooser.getExtensionFilters().add(new ExtensionFilter("Jar(.jar) or Class(.class)", "*.class", "*.jar"));
 
 			File file = fileChooser.showOpenDialog(getScene().getWindow());
 			if (file == null)
 				return;
 
-			final ClassEditor ce = new ClassEditor(file);
+			Editor editor = new Editor(file.toPath());
 			tabPane.widthProperty().addListener((observable, oldValue, newValue) -> {
-				ce.setPrefWidth((double) newValue);
+				editor.setPrefWidth((double) newValue);
 			});
 			tabPane.heightProperty().addListener((observable, oldValue, newValue) -> {
-				ce.setPrefHeight((double) newValue - tabPane.getTabMaxHeight() - 5);
+				editor.setPrefHeight((double) newValue - tabPane.getTabMaxHeight() - 5);
 			});
-			ce.setPrefSize(tabPane.getWidth(), tabPane.getHeight() - tabPane.getTabMaxHeight() - 5);
-			tabPane.getTabs().add(new Tab(file.getName(), ce));
+			editor.setPrefSize(tabPane.getWidth(), tabPane.getHeight() - tabPane.getTabMaxHeight() - 5);
+			tabPane.getTabs().add(new Tab(file.getName(), editor));
 		});
 		Button save = new Button("Save");
 		save.setOnAction(event -> {
 			if (tabPane.getSelectionModel().getSelectedItem() == null)
 				return;
-			((ClassEditor) tabPane.getSelectionModel().getSelectedItem().getContent()).saveBytecode();
+			((Editor) tabPane.getSelectionModel().getSelectedItem().getContent()).save();
 		});
-		Button asm = new Button("ASM");
-		asm.setOnAction(event -> {
+		Button bytecode = new Button("Bytecode");
+		bytecode.setOnAction(event -> {
 			if (tabPane.getSelectionModel().getSelectedItem() == null)
 				return;
-			((ClassEditor) tabPane.getSelectionModel().getSelectedItem().getContent()).showASM();
+			((Editor) tabPane.getSelectionModel().getSelectedItem().getContent()).showBytecode();
 		});
-		Button source = new Button("ASMSource");
-		source.setOnAction(event -> {
+		Button asmcode = new Button("ASM code");
+		asmcode.setOnAction(event -> {
 			if (tabPane.getSelectionModel().getSelectedItem() == null)
 				return;
-			((ClassEditor) tabPane.getSelectionModel().getSelectedItem().getContent()).showASMSource();
+			((Editor) tabPane.getSelectionModel().getSelectedItem().getContent()).showAsmSource();
 		});
 
-		ToolBar toolBar = new ToolBar(open, save, asm, source);
+		ToolBar toolBar = new ToolBar(open, save, bytecode, asmcode);
 		toolBar.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
 
 		setTop(toolBar);

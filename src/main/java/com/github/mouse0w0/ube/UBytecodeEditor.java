@@ -1,12 +1,17 @@
 package com.github.mouse0w0.ube;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.mouse0w0.ube.ui.MainUI;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public final class Main extends Application {
+public final class UBytecodeEditor extends Application {
+	
+	public static final Logger LOGGER = LoggerFactory.getLogger("UBytecodeEditor");
 
 	public static void main(String[] args) {
 		launch(args);

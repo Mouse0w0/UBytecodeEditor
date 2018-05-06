@@ -1,4 +1,4 @@
-package com.github.mouse0w0.ube.wrapper.util;
+package com.github.mouse0w0.ube.util;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
